@@ -1,0 +1,1406 @@
+/* ==========================================
+   GLOBAL
+   ========================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f4f7fb;
+    color: #222;
+    min-height: 100vh;
+}
+
+
+/* ==========================================
+   HEADER
+   ========================================== */
+
+.header {
+    background: linear-gradient(
+        135deg,
+        #0b4f71,
+        #086f91
+    );
+    color: white;
+    padding: 18px 35px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow:
+        0 3px 12px rgba(0, 0, 0, 0.12);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.header-right {
+    font-size: 14px;
+    opacity: 0.92;
+}
+
+
+/* ==========================================
+   MAIN CONTAINER
+   ========================================== */
+
+.container {
+    max-width: 1250px;
+    margin: auto;
+    padding: 40px 25px 60px;
+}
+
+
+/* ==========================================
+   WELCOME
+   ========================================== */
+
+.welcome {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.welcome h1 {
+    color: #0b4f71;
+    margin-bottom: 8px;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.welcome p {
+    color: #667085;
+    font-size: 16px;
+}
+
+
+/* ==========================================
+   MAIN MENU
+   ========================================== */
+
+.menu-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1050px;
+    margin: auto;
+}
+
+.menu-card {
+    background: white;
+    padding: 32px 25px;
+    min-height: 210px;
+    text-decoration: none;
+    color: #222;
+    border-radius: 16px;
+    border: 1px solid #e3ebf1;
+    box-shadow:
+        0 5px 18px rgba(0, 0, 0, 0.06);
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.menu-card:hover {
+    transform: translateY(-6px);
+    border-color: #8bc6dc;
+    box-shadow:
+        0 12px 28px rgba(11, 79, 113, 0.14);
+}
+
+.menu-card .icon {
+    width: 68px;
+    height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eaf6fa;
+    border-radius: 18px;
+    font-size: 32px;
+    margin-bottom: 18px;
+}
+
+.menu-card h2 {
+    color: #0b4f71;
+    margin-bottom: 9px;
+    font-size: 20px;
+}
+
+.menu-card p {
+    color: #727b87;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+/* ==========================================
+   SECTIONS
+   ========================================== */
+
+.section {
+    background: white;
+    margin-top: 30px;
+    padding: 30px;
+    border-radius: 16px;
+    border: 1px solid #e4ebf0;
+    box-shadow:
+        0 5px 18px rgba(0, 0, 0, 0.06);
+}
+
+.radio-group {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.radio-group label {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.radio-group input[type="radio"] {
+    width: auto;
+    margin: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+
+/* ==========================================
+   SECTION HEADER
+   ========================================== */
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e7edf2;
+}
+
+.section-header h2 {
+    color: #0b4f71;
+    font-size: 25px;
+}
+
+
+/* ==========================================
+   OLD DASHBOARD GRID
+   ========================================== */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+.dashboard-card {
+    background: white;
+    border: 1px solid #e2eaf0;
+    border-radius: 14px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-height: 115px;
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.05);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-4px);
+    border-color: #9ccddd;
+    box-shadow:
+        0 10px 22px rgba(11, 79, 113, 0.10);
+}
+
+.dashboard-icon {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: #eaf6fa;
+    font-size: 24px;
+}
+
+.dashboard-card h3 {
+    color: #667085;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.dashboard-number {
+    color: #0b4f71;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+
+/* ==========================================
+   NEW DASHBOARD SERVICE SUMMARY
+   ========================================== */
+
+.dashboard-summary {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #e1e9ef;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow:
+        0 6px 20px rgba(0, 0, 0, 0.06);
+    margin-bottom: 28px;
+}
+
+.dashboard-row {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    min-height: 105px;
+    border-bottom: 1px solid #e7edf2;
+}
+
+.dashboard-row:last-child {
+    border-bottom: none;
+}
+
+.dashboard-header-row {
+    min-height: 58px;
+    background: linear-gradient(
+        135deg,
+        #0b4f71,
+        #087b9e
+    );
+    color: white;
+    font-weight: 600;
+}
+
+.dashboard-cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 18px;
+    border-right: 1px solid #e7edf2;
+}
+
+.dashboard-cell:last-child {
+    border-right: none;
+}
+
+.service-type-cell {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 13px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #0b4f71;
+    padding-left: 25px;
+}
+
+.dashboard-header-row .dashboard-cell {
+    border-right-color: rgba(255, 255, 255, 0.18);
+}
+
+.dashboard-header-row .service-type-cell {
+    color: white;
+}
+
+.service-icon {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 22px;
+}
+
+.service-icon-call {
+    background: #eaf6fa;
+}
+
+.service-icon-application {
+    background: #eef4ff;
+}
+
+.dashboard-summary .dashboard-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0b4f71;
+    line-height: 1.2;
+}
+
+.dashboard-summary .completed-number {
+    color: #16805c;
+}
+
+.dashboard-summary .pending-number {
+    color: #d27a18;
+}
+
+.dashboard-cell small {
+    display: block;
+    margin-top: 5px;
+    color: #7a8793;
+    font-size: 12px;
+}
+
+.dashboard-header-row .dashboard-cell small {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.dashboard-row:not(.dashboard-header-row):hover {
+    background: #f8fbfc;
+}
+
+
+/* ==========================================
+   DASHBOARD REPORT
+   ========================================== */
+
+.dashboard-report {
+    margin-top: 10px;
+    background: #ffffff;
+    border: 1px solid #e4ebf0;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.report-header {
+    margin-bottom: 20px;
+}
+
+.report-header h2 {
+    color: #0b4f71;
+    font-size: 21px;
+    margin-bottom: 5px;
+}
+
+.report-header p {
+    color: #727b87;
+    font-size: 14px;
+}
+
+.report-placeholder {
+    min-height: 210px;
+    border: 1px dashed #b9d6e2;
+    border-radius: 12px;
+    background: linear-gradient(
+        135deg,
+        #f8fcfd,
+        #eef8fb
+    );
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.report-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+}
+
+.report-placeholder h3 {
+    color: #0b4f71;
+    margin-bottom: 6px;
+}
+
+.report-placeholder p {
+    color: #77818d;
+    font-size: 14px;
+}
+
+
+/* ==========================================
+   QUICK ACTIONS
+   ========================================== */
+
+.quick-actions {
+    margin-top: 25px;
+    background: #ffffff;
+    border: 1px solid #e4ebf0;
+    border-radius: 15px;
+    padding: 25px;
+}
+
+.quick-actions h2 {
+    color: #0b4f71;
+    font-size: 21px;
+    margin-bottom: 17px;
+}
+
+.quick-action-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+
+/* ==========================================
+   FORM
+   ========================================== */
+
+.form-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(2, 1fr);
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #344054;
+}
+
+
+/* ==========================================
+   INPUTS
+   ========================================== */
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 13px;
+    border: 1px solid #ccd5dd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #222;
+    background: #ffffff;
+    outline: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.form-group input,
+.form-group select {
+    height: 46px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #1682a6;
+    box-shadow:
+        0 0 0 3px rgba(22, 130, 166, 0.10);
+}
+
+.form-group input:read-only {
+    background: #f1f5f8;
+    color: #667085;
+    cursor: not-allowed;
+}
+
+.form-group textarea {
+    min-height: 105px;
+    resize: vertical;
+}
+
+
+/* ==========================================
+   FILE INPUT
+   ========================================== */
+
+.form-group input[type="file"] {
+    height: auto;
+    padding: 10px;
+    background: #f8fafc;
+    cursor: pointer;
+}
+
+.form-group small {
+    color: #667085;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+
+/* ==========================================
+   FULL WIDTH
+   ========================================== */
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+
+/* ==========================================
+   BUTTON ROW
+   ========================================== */
+
+.button-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+
+/* ==========================================
+   BUTTONS
+   ========================================== */
+
+.primary-btn,
+.secondary-btn {
+    border: none;
+    padding: 11px 22px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: inherit;
+    font-weight: 600;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.primary-btn {
+    background: linear-gradient(
+        135deg,
+        #0b4f71,
+        #087b9e
+    );
+    color: white;
+    box-shadow:
+        0 5px 12px rgba(11, 79, 113, 0.18);
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 8px 17px rgba(11, 79, 113, 0.25);
+}
+
+.secondary-btn {
+    background: #edf1f4;
+    color: #344054;
+    border: 1px solid #d7dfe5;
+}
+
+.secondary-btn:hover {
+    background: #e2e8ed;
+    transform: translateY(-2px);
+}
+
+
+/* ==========================================
+   MESSAGES
+   ========================================== */
+
+#registerMessage,
+#completeMessage {
+    margin-top: 20px;
+}
+
+
+/* ==========================================
+   PENDING SERVICES
+   ========================================== */
+
+#pendingServices {
+    display: grid;
+    grid-template-columns:
+        repeat(2, 1fr);
+    gap: 18px;
+}
+
+.pending-card {
+    background: #f8fafc;
+    border: 1px solid #dce4ea;
+    padding: 20px;
+    margin-bottom: 0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.pending-card:hover {
+    border-color: #0b4f71;
+    transform: translateY(-3px);
+    box-shadow:
+        0 8px 18px rgba(11, 79, 113, 0.09);
+}
+
+.pending-card h3 {
+    color: #0b4f71;
+    margin-bottom: 9px;
+    font-size: 17px;
+}
+
+.pending-card p {
+    color: #667085;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+
+/* ==========================================
+   SERVICE INFO
+   ========================================== */
+
+.service-info {
+    background: linear-gradient(
+        135deg,
+        #f3f9fb,
+        #f8fbfc
+    );
+    border: 1px solid #d7e8ee;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+}
+
+
+/* ==========================================
+   RESPONSIVE - TABLET
+   ========================================== */
+
+@media (max-width: 1050px) {
+
+    .dashboard-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .menu-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+
+/* ==========================================
+   RESPONSIVE - MOBILE
+   ========================================== */
+
+@media (max-width: 700px) {
+
+    .container {
+        padding: 25px 15px 40px;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 7px;
+        text-align: center;
+        padding: 16px 20px;
+    }
+
+    .logo {
+        font-size: 21px;
+    }
+
+    .header-right {
+        font-size: 13px;
+    }
+
+    .welcome {
+        margin-bottom: 28px;
+    }
+
+    .welcome h1 {
+        font-size: 29px;
+    }
+
+    .menu-grid,
+    .form-grid,
+    .dashboard-grid,
+    #pendingServices {
+        grid-template-columns: 1fr;
+    }
+
+    .section {
+        padding: 20px 17px;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 13px;
+    }
+
+    .section-header h2 {
+        font-size: 22px;
+    }
+
+    .full-width {
+        grid-column: auto;
+    }
+
+    .button-row {
+        flex-direction: column;
+    }
+
+    .button-row button {
+        width: 100%;
+    }
+
+    .quick-action-grid {
+        flex-direction: column;
+    }
+
+    .quick-action-grid button {
+        width: 100%;
+    }
+
+    .dashboard-card {
+        min-height: 100px;
+    }
+
+
+    /* ==========================================
+       MOBILE DASHBOARD SUMMARY
+       ========================================== */
+
+    .dashboard-row {
+        grid-template-columns:
+            1.2fr 1fr 1fr 1fr;
+        min-height: 95px;
+    }
+
+    .dashboard-cell {
+        padding: 10px 6px;
+    }
+
+    .service-type-cell {
+        padding-left: 10px;
+        gap: 7px;
+        font-size: 13px;
+    }
+
+    .service-icon {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        font-size: 17px;
+    }
+
+    .dashboard-summary .dashboard-number {
+        font-size: 21px;
+    }
+
+    .dashboard-cell small {
+        font-size: 9px;
+    }
+
+    .dashboard-header-row {
+        min-height: 52px;
+    }
+
+    .dashboard-header-row .dashboard-cell {
+        font-size: 11px;
+    }
+}
+/* ==========================================
+   ADDITIONAL DASHBOARD SUMMARY
+   ========================================== */
+
+.dashboard-extra-summary {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 20px;
+
+    margin-top: 24px;
+
+    margin-bottom: 28px;
+}
+
+
+.dashboard-extra-card {
+
+    background: #ffffff;
+
+    border: 1px solid #e1e9ef;
+
+    border-radius: 16px;
+
+    padding: 24px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    box-shadow:
+        0 6px 20px rgba(0, 0, 0, 0.06);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.dashboard-extra-card:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.09);
+
+}
+
+
+.dashboard-extra-icon {
+
+    width: 52px;
+
+    height: 52px;
+
+    min-width: 52px;
+
+    border-radius: 14px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 25px;
+
+    background: #eef6fa;
+}
+
+
+.dashboard-extra-content {
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+
+.dashboard-extra-number {
+
+    font-size: 30px;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    color: #0b4f71;
+}
+
+
+.dashboard-extra-title {
+
+    margin-top: 4px;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    color: #263746;
+}
+
+
+.dashboard-extra-content small {
+
+    margin-top: 4px;
+
+    font-size: 11px;
+
+    color: #7a8793;
+}
+
+
+/* ==========================================
+   MOBILE
+   ========================================== */
+
+@media (max-width: 700px) {
+
+    .dashboard-extra-summary {
+
+        grid-template-columns: 1fr;
+
+        gap: 12px;
+
+    }
+
+
+    .dashboard-extra-card {
+
+        padding: 18px;
+
+    }
+
+
+    .dashboard-extra-number {
+
+        font-size: 25px;
+
+    }
+
+}
+
+/* ==========================================
+   MAIN NAVIGATION BAR
+   ========================================== */
+
+.main-navbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: #ffffff;
+    border-bottom: 1px solid #e1e9ef;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 70px;
+    z-index: 99;
+    overflow-x: auto;
+}
+
+/* Navigation Buttons */
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #344054;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+    background: #eaf6fa;
+    color: #0b4f71;
+}
+
+.nav-item.active {
+    background: linear-gradient(135deg, #0b4f71, #087b9e);
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(11, 79, 113, 0.18);
+}
+
+/* Admin Badge */
+
+.admin-badge {
+    display: inline-block;
+    padding: 3px 7px;
+    border-radius: 10px;
+    background: #fff0c2;
+    color: #805b00;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+/* Navigation Focus */
+
+.nav-item:focus-visible {
+    outline: 3px solid #8bc6dc;
+    outline-offset: 2px;
+}
+
+
+
+/* ==========================================
+   RESPONSIVE NAVIGATION
+   ========================================== */
+
+@media (max-width: 900px) {
+    .main-navbar {
+        position: static;
+        gap: 5px;
+        padding: 10px;
+    }
+
+    .nav-item {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 700px) {
+    .main-navbar {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .nav-item {
+        flex: 0 0 auto;
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    .admin-badge {
+        font-size: 9px;
+    }
+}
+
+/* ==========================================
+   SECTION SPACING
+   ========================================== */
+
+.container {
+    padding-top: 25px;
+}
+
+/* Hide inactive sections */
+
+.hidden {
+    display: none !important;
+}
+
+/* ==========================================
+   ACTIVE AND COMPLETED CALLS - RESPONSIVE
+========================================== */
+
+#pendingServices,
+#completedServices {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 15px;
+}
+
+#pendingServices table,
+#completedServices table {
+    width: 100%;
+    min-width: 1050px;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+#pendingServices th,
+#pendingServices td,
+#completedServices th,
+#completedServices td {
+    padding: 12px 14px;
+    text-align: left;
+    vertical-align: middle;
+    overflow-wrap: break-word;
+}
+
+#pendingServices th,
+#completedServices th {
+    white-space: normal;
+    background: #c5dcf3;
+    color: #123b63;
+}
+
+#pendingServices td,
+#completedServices td {
+    white-space: normal;
+}
+
+/* Keep action buttons visible */
+
+#pendingServices td:last-child,
+#completedServices td:last-child {
+    white-space: nowrap;
+}
+
+#pendingServices button,
+#completedServices button {
+    white-space: nowrap;
+}
+
+/* Mobile screens */
+
+@media (max-width: 768px) {
+
+    #pendingServices table,
+    #completedServices table {
+        min-width: 950px;
+    }
+
+    #pendingServices th,
+    #pendingServices td,
+    #completedServices th,
+    #completedServices td {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+}
+#pendingServices {
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 20px;
+width: 100%;
+min-width: 0;
+align-items: stretch;
+}
+
+/* Individual Active Call Card */
+#pendingServices .pending-card {
+width: 100%;
+min-width: 0;
+max-width: 100%;
+margin: 0;
+padding: 22px;
+background: #ffffff;
+border: 1px solid #e1e9ef;
+border-radius: 14px;
+box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+cursor: pointer;
+overflow-wrap: anywhere;
+word-break: normal;
+transition: transform 0.2s ease,
+box-shadow 0.2s ease,
+border-color 0.2s ease;
+}
+
+/* Hover Effect */
+#pendingServices .pending-card:hover {
+transform: translateY(-3px);
+border-color: #8bc6dc;
+box-shadow: 0 8px 20px rgba(11, 79, 113, 0.12);
+}
+
+/* Card Heading */
+#pendingServices .pending-card h3 {
+color: #0b4f71;
+font-size: 18px;
+line-height: 1.4;
+margin: 0 0 14px;
+overflow-wrap: anywhere;
+}
+
+/* Card Information */
+#pendingServices .pending-card p {
+color: #667085;
+font-size: 14px;
+line-height: 1.6;
+margin: 0 0 9px;
+overflow-wrap: anywhere;
+}
+
+/* Emphasized Information */
+#pendingServices .pending-card strong {
+color: #344054;
+font-weight: 600;
+}
+
+/* Buttons or Links Inside Cards */
+#pendingServices .pending-card button,
+#pendingServices .pending-card a {
+max-width: 100%;
+white-space: normal;
+overflow-wrap: anywhere;
+}
+
+/* Prevent Wide Tables or Content from Breaking the Layout */
+#pendingServices > * {
+min-width: 0;
+max-width: 100%;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+#pendingServices {
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 15px;
+}
+
+
+#pendingServices .pending-card {
+    padding: 18px;
+}
+
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+#pendingServices {
+grid-template-columns: minmax(0, 1fr);
+gap: 14px;
+}
+
+#pendingServices .pending-card {
+    padding: 17px;
+    border-radius: 12px;
+}
+
+#pendingServices .pending-card h3 {
+    font-size: 16px;
+}
+
+#pendingServices .pending-card p {
+    font-size: 13px;
+}
+
+}
+
+/* Keep the Active Calls section within its parent */
+#pending {
+min-width: 0;
+width: 100%;
+}
+
+#pending .section-header {
+min-width: 0;
+}
+
+#pending .section-header h2 {
+overflow-wrap: anywhere;
+}
+
+
+/* Table filters are displayed above the table, not inside its header. */
+.table-filters-toolbar {
+    margin: 14px 0 10px;
+    padding: 14px;
+    background: #f8fafc;
+    border: 1px solid #dbe3ec;
+    border-radius: 8px;
+}
+
+.table-filters-title {
+    margin-bottom: 10px;
+    color: #123b63;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.table-filters-controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 10px;
+}
+
+.table-filter-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+    color: #344054;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.table-filter-field select.table-column-filter {
+    width: 100%;
+    min-width: 0;
+    padding: 8px 9px;
+    border: 1px solid #d0d5dd;
+    border-radius: 5px;
+    background: #fff;
+    color: #1d2939;
+    font-size: 13px;
+    box-sizing: border-box;
+}
+
+.table-filter-field select.table-column-filter:focus {
+    outline: none;
+    border-color: #123b63;
+    box-shadow: 0 0 0 2px rgba(18, 59, 99, 0.12);
+}
+
+.table-filter-reset {
+    margin-top: 10px;
+}
+
+.table-filter-empty {
+    padding: 18px !important;
+    text-align: center;
+    color: #667085;
+}
+
+@media (max-width: 600px) {
+    .table-filters-controls {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================================
+   ACTIVE CALLS: KEEP FILTER TOOLBAR ABOVE THE TABLE
+   #pendingServices previously used a two-column grid, which
+   placed the filter toolbar beside the table. Force a vertical
+   layout so filters appear full-width above the table.
+========================================================= */
+#pendingServices {
+    display: block !important;
+    grid-template-columns: none !important;
+    width: 100%;
+    min-width: 0;
+}
+
+#pendingServices > .table-filters-toolbar {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 14px 0 12px;
+}
+
+#pendingServices > .table-responsive {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-top: 0;
+}
+
+#pendingServices > .table-responsive table {
+    width: 100%;
+}

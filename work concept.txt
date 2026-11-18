@@ -1,0 +1,262 @@
+Got it. Based on your current MySQL tables, the Stedman Diagnostics portal should work as one connected system. The Admin maintains the master data, and Service Persons use that data when registering service calls.
+
+You already have the necessary tables: lab_master, instrument_master, and service_calls. Your instrument_master table also contains lab_id, so the lab and its instruments can be mapped directly.
+
+1. How the system should work
+A. Admin Login
+
+The Admin should have access to these sections:
+
+1. Lab Master
+
+The Admin can add, edit, and activate/deactivate laboratories.
+
+Field	Source
+Lab ID	Auto-generated
+Lab Name	Enter manually
+Address	Enter manually
+City	Enter manually
+Lab Phone Number	Enter manually
+Lab Email	Enter manually
+Contact Person	Enter manually
+Status	Active / Inactive
+
+These fields map to your existing lab_master columns.
+
+2. Instrument Master
+
+The Admin can add instruments and associate them with laboratories.
+
+Field	Source
+Instrument ID	Auto-generated
+Lab Name	Dropdown from Lab Master
+Instrument Name	Enter manually
+Manufacturer	Enter manually
+Model Number	Enter manually
+Serial Number	Enter manually
+Installation Date	Enter manually
+Warranty Status	Enter manually
+Warranty Expiry Date	Enter manually
+Status	Active / Inactive
+
+When the Admin selects a lab, its ID is stored in instrument_master.lab_id. This creates the lab–instrument mapping.
+
+For example:
+
+Instrument	Serial Number	Lab
+Analyzer A	SN1001	ABC Diagnostics
+Analyzer B	SN1002	ABC Diagnostics
+Analyzer C	SN2001	XYZ Diagnostics
+
+The Service Person will then see only the instruments associated with the selected lab.
+
+B. Service Person Login
+
+The Service Person should be able to access:
+
+Dashboard
+Log Call
+Active Calls
+Completed Calls
+
+They should not be able to add or edit master data.
+
+C. Log Call page
+
+The Log Call page should work as follows.
+
+Step 1: Select the laboratory
+
+The Service Person selects a lab from a dropdown populated from lab_master.
+
+For example:
+
+Select Lab: [ABC Diagnostics ▼]
+
+Step 2: Fetch the lab details automatically
+
+After selecting the lab, the page fetches the corresponding details from lab_master.
+
+Field	Behavior
+Lab Name	Filled automatically
+Lab Address	Filled automatically
+City	Filled automatically
+Lab Phone Number	Filled automatically
+Lab Email	Filled automatically
+Contact Person	Can be entered or populated from the master
+Mobile Number	Can be entered or populated from the master
+
+The lab details should be read-only on the Log Call page so the Service Person cannot accidentally change the master data.
+
+Important: Your current database has lab_incharge_contact and mobile_number, but it does not have a separate contact-person mobile number and lab telephone number. If those are different details, we should add separate fields rather than treating them as the same thing.
+
+Step 3: Select the instrument
+
+Once the lab is selected, load only that lab's active instruments.
+
+For example:
+
+Select Instrument: [Analyzer A - SN1001 ▼]
+
+If the selected lab has no active instruments, display a message such as:
+
+No active instruments are mapped to this laboratory.
+
+Step 4: Enter the service call details
+
+The form should include:
+
+Field	Behavior
+Lab	Dropdown from Lab Master
+Lab Address	Auto-filled
+Lab Phone	Auto-filled
+Lab Email	Auto-filled
+Instrument	Dropdown filtered by selected lab
+Serial Number	Auto-filled
+Call Type	Application Call / Service Call
+Problem Reported	Mandatory text field
+Contact Person	Auto-filled or manually entered
+Contact Mobile	Auto-filled or manually entered
+Assigned Engineer	Dropdown of active Service Persons
+Logged Date & Time	Generated automatically
+
+The Service Person clicks Submit Call.
+
+The application validates the information and inserts the call into service_calls.
+
+A unique call ID is generated, such as SD-20261019-103000-123.
+
+The new call should immediately appear under Active Calls.
+
+2. How the database tables connect
+
+Your existing structure supports the core workflow:
+
+                    USERS
+                      |
+                Admin / Service Person
+                      |
+                      v
+                  LAB MASTER
+                      |
+                      | lab_master.id
+                      |
+                      v
+               INSTRUMENT MASTER
+                      |
+                      | instrument_master.id
+                      |
+                      v
+                 SERVICE CALLS
+
+More precisely, the database relationships are:
+
+instrument_master.lab_id → lab_master.id
+service_calls.lab_id → lab_master.id
+service_calls.instrument_id → instrument_master.id
+
+The Log Call page should use these relationships to populate dropdowns and retrieve the correct details.
+
+You do not need a separate mapping table for the current design, because each instrument already stores its associated lab ID.
+
+3. API files required
+
+For this workflow, the PHP application should have these API files.
+
+API file	Purpose
+api/session.php	Identify the logged-in user and role
+api/labs.php	Retrieve labs and manage lab master data
+api/instruments.php	Retrieve instruments and manage instrument master data
+api/lab-instrument-mapping.php	View or update instrument-to-lab mappings
+api/engineers.php	Retrieve active Service Persons for assignment
+api/create-service.php	Validate and register a service call
+api/pending-services.php	Retrieve active calls
+api/dashboard.php	Retrieve dashboard statistics
+
+The frontend JavaScript should call these APIs. The PHP APIs must enforce permissions independently; hiding Admin buttons in the browser is not sufficient security.
+
+Critical validations
+
+The backend must ensure that:
+
+The user is logged in.
+Only Admin users can add or modify master data.
+Both Admin and Service Person users can register calls if that is your intended permission model.
+The selected lab exists and is active.
+The selected instrument belongs to the selected lab and is active.
+The call type is valid.
+Required fields are present.
+The logged-in session is preserved when JavaScript sends API requests.
+4. Important database detail
+
+Your current schema has these relevant fields:
+
+lab_master
+
+diagnostic_lab_name
+lab_incharge_contact
+mobile_number
+email_address
+city_location
+full_address
+status
+
+instrument_master
+
+lab_id
+instrument_name
+manufacturer
+model_number
+serial_number
+installation_date
+warranty_status
+warranty_expiry_date
+status
+
+service_calls
+
+lab_id
+instrument_id
+call_type
+problem_reported
+contact_person
+mobile
+assigned_engineer
+logged_datetime
+status
+
+These fields are sufficient for the core registration workflow. We should avoid recreating the tables or dropping existing data.
+
+One detail needs to be handled carefully: the Log Call page should fetch lab details from lab_master, but service_calls currently stores only the lab ID and the contact details entered for the call. If you want the exact address, email, and phone number as they were when the call was logged to remain available even after a master record changes, we should also store a snapshot of those details in service_calls.
+
+5. Let's fix your existing project rather than rebuild it
+
+You have already been working on index.php, assets/js/app.js, and the PHP API files. The correct next step is to inspect the existing implementation and align the files with your actual database schema.
+
+Please upload your current project ZIP, or provide these files:
+
+index.php
+assets/js/app.js
+api/labs.php
+api/instruments.php
+api/create-service.php
+config/database.php
+includes/auth.php
+
+I can then update the actual files so that:
+
+Admin can add and edit labs.
+Admin can add and edit instruments and map them to labs.
+Service Persons can register calls.
+Selecting a lab automatically fills its details.
+Selecting a lab filters the instrument dropdown.
+Submitting a call saves it correctly in MySQL.
+The new call appears in Active Calls.
+Existing login, dashboard, and database data are preserved.
+
+The goal is to make the complete workflow work end to end—not just make the dropdowns appear.
+
+Chat paused until usage resets at 4:52 AM
+You’ve reached the limit for chats that include files or images. Start a new text-only chat or upgrade to continue now.
+New chat
+Upgrade to Go
