@@ -422,7 +422,7 @@ try {
         );
     }
 
-    if (is_file($destination)) {
+    if ($destination !== null && is_file($destination)) {
         unlink($destination);
     }
 

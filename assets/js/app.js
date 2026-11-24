@@ -146,6 +146,7 @@ async function loadDashboard() {
             pendingApplicationCalls: "pending_application_calls",
 
             totalHospitals: "total_labs",
+            totalInstruments: "total_instruments",
             todayServices: "today_calls",
             monthlyServices: "monthly_calls"
         };
@@ -168,12 +169,21 @@ async function loadDashboard() {
    LAB MASTER DATA FOR LOG CALL
 ========================================================= */
 
+const NOT_AVAILABLE_TEXT = "Not Available";
+
+function formatFieldOrNotAvailable(value) {
+    const trimmed = String(value ?? "").trim();
+    return trimmed !== "" ? trimmed : NOT_AVAILABLE_TEXT;
+}
+
 async function loadLabs() {
     const select = document.getElementById("lab_id");
 
     if (!select) {
         return;
     }
+
+    clearLabDetails();
 
     select.replaceChildren(
         new Option("Loading laboratories...", "")
@@ -193,18 +203,18 @@ async function loadLabs() {
                 lab.id
             );
 
-            option.dataset.city = lab.city_location || "";
-            option.dataset.contact = lab.lab_incharge_contact || "";
-            option.dataset.mobile = lab.mobile_number || "";
-            option.dataset.email = lab.email_address || "";
-            option.dataset.address = lab.full_address || "";
+            option.dataset.city = String(lab.city_location ?? "").trim();
+            option.dataset.contact = String(lab.lab_incharge_contact ?? "").trim();
+            option.dataset.mobile = String(lab.mobile_number ?? "").trim();
+            option.dataset.email = String(lab.email_address ?? "").trim();
+            option.dataset.address = String(lab.full_address ?? "").trim();
 
             select.add(option);
         });
 
         if (labs.length === 0) {
             select.replaceChildren(
-                new Option("No active laboratories found", "")
+                new Option(NOT_AVAILABLE_TEXT, "")
             );
         }
 
@@ -233,7 +243,9 @@ function clearLabDetails() {
         "address",
         "city_location",
         "phone",
-        "email"
+        "email",
+        "contact_person",
+        "mobile"
     ].forEach(id => {
         const element = document.getElementById(id);
 
@@ -274,30 +286,30 @@ async function handleLabSelection() {
     const email = document.getElementById("email");
 
     if (address) {
-        address.value = option.dataset.address || "";
+        address.value = formatFieldOrNotAvailable(option.dataset.address);
     }
 
     if (city) {
-        city.value = option.dataset.city || "";
+        city.value = formatFieldOrNotAvailable(option.dataset.city);
     }
 
     if (phone) {
-        phone.value = option.dataset.mobile || "";
+        phone.value = formatFieldOrNotAvailable(option.dataset.mobile);
     }
 
     if (email) {
-        email.value = option.dataset.email || "";
+        email.value = formatFieldOrNotAvailable(option.dataset.email);
     }
 
     const contact = document.getElementById("contact_person");
     const mobile = document.getElementById("mobile");
 
-    if (contact && !contact.value.trim()) {
-        contact.value = option.dataset.contact || "";
+    if (contact) {
+        contact.value = formatFieldOrNotAvailable(option.dataset.contact);
     }
 
-    if (mobile && !mobile.value.trim()) {
-        mobile.value = option.dataset.mobile || "";
+    if (mobile) {
+        mobile.value = formatFieldOrNotAvailable(option.dataset.mobile);
     }
 
     await loadInstrumentsForLab(labId);
@@ -347,7 +359,7 @@ async function loadInstrumentsForLab(labId) {
 
         if (instruments.length === 0) {
             select.replaceChildren(
-                new Option("No active instruments mapped to this lab", "")
+                new Option(NOT_AVAILABLE_TEXT, "")
             );
         }
 
@@ -644,13 +656,15 @@ async function openServiceDetails(id) {
 
         if (selected) {
             selected.innerHTML = `
-                <h3>${escapeHtml(service.call_id)}</h3>
-                <p><strong>Lab:</strong> ${escapeHtml(service.diagnostic_lab_name)}</p>
-                <p><strong>Address:</strong> ${escapeHtml(service.full_address || "-")}</p>
-                <p><strong>Phone:</strong> ${escapeHtml(service.lab_mobile || "-")}</p>
-                <p><strong>Email:</strong> ${escapeHtml(service.email_address || "-")}</p>
-                <p><strong>Instrument:</strong> ${escapeHtml(service.instrument_name || "-")}</p>
-                <p><strong>Status:</strong> ${escapeHtml(service.status || "-")}</p>
+                <div class="service-summary-bar">
+                    <div class="service-summary-item"><strong>Call ID:</strong> <span>${escapeHtml(service.call_id)}</span></div>
+                    <div class="service-summary-item"><strong>Lab:</strong> <span>${escapeHtml(service.diagnostic_lab_name)}</span></div>
+                    <div class="service-summary-item"><strong>Status:</strong> <span>${escapeHtml(service.status || "-")}</span></div>
+                    <div class="service-summary-item"><strong>Instrument:</strong> <span>${escapeHtml(service.instrument_name || "-")}</span></div>
+                    <div class="service-summary-item"><strong>Phone:</strong> <span>${escapeHtml(service.lab_mobile || "-")}</span></div>
+                    <div class="service-summary-item"><strong>Email:</strong> <span>${escapeHtml(service.email_address || "-")}</span></div>
+                    <div class="service-summary-item service-summary-address"><strong>Address:</strong> <span>${escapeHtml(service.full_address || "-")}</span></div>
+                </div>
             `;
         }
 
@@ -929,10 +943,10 @@ async function loadLabMaster() {
             <h3>Existing Laboratories</h3>
 
             <div class="table-responsive">
-            <table class="data-table">
+            <table id="labMasterTable" class="data-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>S.No</th>
                         <th>Lab Name</th>
                         <th>City</th>
                         <th>Phone</th>
@@ -944,14 +958,14 @@ async function loadLabMaster() {
                 <tbody>
         `;
 
-        labs.forEach(lab => {
+        labs.forEach((lab, index) => {
             const json = JSON.stringify(lab)
                 .replace(/</g, "\\u003c")
                 .replace(/'/g, "\\u0027");
 
             html += `
                 <tr>
-                    <td>${escapeHtml(lab.id)}</td>
+                    <td>${index + 1}</td>
                     <td>${escapeHtml(lab.diagnostic_lab_name)}</td>
                     <td>${escapeHtml(lab.city_location)}</td>
                     <td>${escapeHtml(lab.mobile_number)}</td>
@@ -997,12 +1011,21 @@ async function saveLab(event) {
     const isEdit = Boolean(data.id);
     const url = "api/labs.php";
 
+    if (isEdit) {
+        data._method = "PUT";
+    }
+
     try {
         const response = await fetchJson(url, {
-            method: isEdit ? "PUT" : "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            method: "POST",
+            headers: isEdit
+                ? {
+                    "Content-Type": "application/json",
+                    "X-HTTP-Method-Override": "PUT"
+                }
+                : {
+                    "Content-Type": "application/json"
+                },
             body: JSON.stringify(data)
         });
 
@@ -1160,14 +1183,12 @@ async function loadInstrumentMaster() {
             <h3>Existing Instruments</h3>
 
             <div class="table-responsive">
-            <table class="data-table">
+            <table id="instrumentMasterTable" class="data-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>S.No</th>
                         <th>Lab</th>
                         <th>Instrument</th>
-                        <th>Manufacturer</th>
-                        <th>Model</th>
                         <th>Serial Number</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -1176,18 +1197,16 @@ async function loadInstrumentMaster() {
                 <tbody>
         `;
 
-        instruments.forEach(instrument => {
+        instruments.forEach((instrument, index) => {
             const json = JSON.stringify(instrument)
                 .replace(/</g, "\\u003c")
                 .replace(/'/g, "\\u0027");
 
             html += `
                 <tr>
-                    <td>${escapeHtml(instrument.id)}</td>
+                    <td>${index + 1}</td>
                     <td>${escapeHtml(instrument.diagnostic_lab_name)}</td>
                     <td>${escapeHtml(instrument.instrument_name)}</td>
-                    <td>${escapeHtml(instrument.manufacturer)}</td>
-                    <td>${escapeHtml(instrument.model_number)}</td>
                     <td>${escapeHtml(instrument.serial_number)}</td>
                     <td>${escapeHtml(instrument.status)}</td>
                     <td>
@@ -1229,12 +1248,21 @@ async function saveInstrument(event) {
 
     const isEdit = Boolean(data.id);
 
+    if (isEdit) {
+        data._method = "PUT";
+    }
+
     try {
         const response = await fetchJson("api/instruments.php", {
-            method: isEdit ? "PUT" : "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            method: "POST",
+            headers: isEdit
+                ? {
+                    "Content-Type": "application/json",
+                    "X-HTTP-Method-Override": "PUT"
+                }
+                : {
+                    "Content-Type": "application/json"
+                },
             body: JSON.stringify(data)
         });
 
@@ -1355,7 +1383,31 @@ function getFilterCellValue(row, columnIndex) {
     return normalizeFilterText(cell.textContent);
 }
 
+let searchableFilterDismissBound = false;
+
+function closeAllSearchableFilterMenus(exceptContainer = null) {
+    document.querySelectorAll(".searchable-filter-dropdown.open").forEach(container => {
+        if (exceptContainer && container === exceptContainer) return;
+        container.classList.remove("open");
+        const menu = container.querySelector(".searchable-filter-menu");
+        if (menu) menu.classList.add("hidden");
+    });
+}
+
+function ensureSearchableFilterDismissHandler() {
+    if (searchableFilterDismissBound) return;
+    searchableFilterDismissBound = true;
+
+    document.addEventListener("click", event => {
+        if (!event.target.closest(".searchable-filter-dropdown")) {
+            closeAllSearchableFilterMenus();
+        }
+    });
+}
+
 function applyTableFilters(root = document) {
+    ensureSearchableFilterDismissHandler();
+
     const tables = [];
 
     if (root.matches && root.matches("table.data-table")) tables.push(root);
@@ -1376,11 +1428,14 @@ function applyTableFilters(root = document) {
         if (!headers.length) return;
 
         const tableId = table.id || "";
+        const isMasterTable = tableId === "labMasterTable" || tableId === "instrumentMasterTable";
         const skipFilterLabels = tableId === "activeCallsTable"
             ? new Set(["call id", "instrument", "problem", "action"])
             : tableId === "completedCallsTable"
                 ? new Set(["visit out"])
-                : new Set();
+                : isMasterTable
+                    ? new Set(["s.no", "action"])
+                    : new Set();
 
         const rows = Array.from(tbody.querySelectorAll("tr"))
             .filter(row => !row.classList.contains("empty-row") && row.cells.length > 0);
@@ -1408,27 +1463,129 @@ function applyTableFilters(root = document) {
 
         // Keep current selections only when this is the same table and the values remain valid.
         const previousSelections = new Map();
-        toolbar.querySelectorAll("select.table-column-filter").forEach(select => {
-            previousSelections.set(Number(select.dataset.columnIndex), select.value);
+        toolbar.querySelectorAll("select.table-column-filter, input.table-column-search-input").forEach(control => {
+            previousSelections.set(Number(control.dataset.columnIndex), control.value);
         });
+        const previousGlobalSearch = toolbar.querySelector("input.table-global-search")?.value || "";
         toolbar.innerHTML = "";
 
         const title = document.createElement("div");
         title.className = "table-filters-title";
-        title.textContent = "Filter table";
+        title.textContent = isMasterTable ? "Search & Filter Table" : "Filter table";
         toolbar.appendChild(title);
 
         const controls = document.createElement("div");
         controls.className = "table-filters-controls";
         toolbar.appendChild(controls);
 
+        let globalSearchTerm = previousGlobalSearch;
+        let globalSearchInput = null;
+
+        if (isMasterTable) {
+            const searchLabel = document.createElement("label");
+            searchLabel.className = "table-filter-field table-global-search-field";
+
+            const searchText = document.createElement("span");
+            searchText.textContent = "Search";
+            searchLabel.appendChild(searchText);
+
+            globalSearchInput = document.createElement("input");
+            globalSearchInput.type = "search";
+            globalSearchInput.className = "table-global-search";
+            globalSearchInput.placeholder = tableId === "labMasterTable"
+                ? "Search lab, city, phone, email..."
+                : "Search lab, instrument, serial no...";
+            globalSearchInput.value = globalSearchTerm;
+            globalSearchInput.setAttribute("aria-label", "Search master table");
+            searchLabel.appendChild(globalSearchInput);
+            controls.appendChild(searchLabel);
+        }
+
         const selections = headers.map((_, index) => previousSelections.get(index) || "");
+        const selectionModes = headers.map(() => "exact");
         const selects = [];
+        const searchableDropdowns = [];
+        const availableValuesByColumn = headers.map(() => []);
+
+        function rowMatchesGlobalSearch(row) {
+            const query = normalizeFilterText(globalSearchTerm).toLocaleLowerCase();
+            if (!query) return true;
+
+            return headers.some((header, index) => {
+                const headerLabel = normalizeFilterText(header.textContent).toLocaleLowerCase();
+                if (headerLabel === "action") return false;
+                return getFilterCellValue(row, index).toLocaleLowerCase().includes(query);
+            });
+        }
 
         function rowMatches(row, skipIndex = -1) {
+            if (!rowMatchesGlobalSearch(row)) return false;
+
             return selections.every((selected, index) => {
                 if (index === skipIndex || !selected) return true;
-                return getFilterCellValue(row, index).toLocaleLowerCase() === selected.toLocaleLowerCase();
+                const cellVal = getFilterCellValue(row, index).toLocaleLowerCase();
+                const filterVal = normalizeFilterText(selected).toLocaleLowerCase();
+                if (isMasterTable && selectionModes[index] === "contains") {
+                    return cellVal.includes(filterVal);
+                }
+                return cellVal === filterVal;
+            });
+        }
+
+        function renderSearchableMenu(index, showAll = false) {
+            const widget = searchableDropdowns[index];
+            if (!widget) return;
+
+            const { input, menu, headerText } = widget;
+            const query = showAll ? "" : normalizeFilterText(input.value).toLocaleLowerCase();
+            const values = availableValuesByColumn[index] || [];
+            const filteredValues = query
+                ? values.filter(val => val.toLocaleLowerCase().includes(query))
+                : values;
+
+            menu.innerHTML = "";
+
+            const allBtn = document.createElement("button");
+            allBtn.type = "button";
+            allBtn.className = "searchable-filter-option" + (!selections[index] ? " selected" : "");
+            allBtn.textContent = "All " + headerText;
+            allBtn.addEventListener("mousedown", event => {
+                event.preventDefault();
+                selections[index] = "";
+                selectionModes[index] = "exact";
+                input.value = "";
+                closeAllSearchableFilterMenus();
+                refreshOptions();
+                renderFilteredRows();
+            });
+            menu.appendChild(allBtn);
+
+            if (!filteredValues.length) {
+                const emptyItem = document.createElement("div");
+                emptyItem.className = "searchable-filter-empty";
+                emptyItem.textContent = "No matching options";
+                menu.appendChild(emptyItem);
+                return;
+            }
+
+            filteredValues.forEach(value => {
+                const optionBtn = document.createElement("button");
+                optionBtn.type = "button";
+                const isSelected = selections[index] &&
+                    selections[index].toLocaleLowerCase() === value.toLocaleLowerCase();
+                optionBtn.className = "searchable-filter-option" + (isSelected ? " selected" : "");
+                optionBtn.textContent = value.length > 90 ? value.slice(0, 87) + "..." : value;
+                optionBtn.title = value;
+                optionBtn.addEventListener("mousedown", event => {
+                    event.preventDefault();
+                    selections[index] = value;
+                    selectionModes[index] = "exact";
+                    input.value = value;
+                    closeAllSearchableFilterMenus();
+                    refreshOptions();
+                    renderFilteredRows();
+                });
+                menu.appendChild(optionBtn);
             });
         }
 
@@ -1436,9 +1593,6 @@ function applyTableFilters(root = document) {
             headers.forEach((header, index) => {
                 const headerLabel = normalizeFilterText(header.textContent).toLocaleLowerCase();
                 if (skipFilterLabels.has(headerLabel)) return;
-
-                const select = selects[index];
-                if (!select) return;
 
                 const availableRows = rows.filter(row => rowMatches(row, index));
                 const distinct = new Map();
@@ -1449,6 +1603,25 @@ function applyTableFilters(root = document) {
                     }
                 });
 
+                const sortedValues = Array.from(distinct.values()).sort((a, b) => a.localeCompare(b, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                }));
+                availableValuesByColumn[index] = sortedValues;
+
+                if (isMasterTable) {
+                    const widget = searchableDropdowns[index];
+                    if (!widget) return;
+                    if (widget.container.classList.contains("open")) {
+                        const showAll = selectionModes[index] === "exact";
+                        renderSearchableMenu(index, showAll);
+                    }
+                    return;
+                }
+
+                const select = selects[index];
+                if (!select) return;
+
                 const currentValue = selections[index];
                 select.innerHTML = "";
 
@@ -1457,10 +1630,7 @@ function applyTableFilters(root = document) {
                 allOption.textContent = "All " + (normalizeFilterText(header.textContent) || ("Column " + (index + 1)));
                 select.appendChild(allOption);
 
-                Array.from(distinct.values()).sort((a, b) => a.localeCompare(b, undefined, {
-                    numeric: true,
-                    sensitivity: "base"
-                })).forEach(value => {
+                sortedValues.forEach(value => {
                     const option = document.createElement("option");
                     option.value = value;
                     option.textContent = value.length > 90 ? value.slice(0, 87) + "..." : value;
@@ -1510,31 +1680,122 @@ function applyTableFilters(root = document) {
             }
         }
 
+        if (globalSearchInput) {
+            globalSearchInput.addEventListener("input", () => {
+                globalSearchTerm = globalSearchInput.value;
+                renderFilteredRows();
+            });
+        }
+
         headers.forEach((header, index) => {
             const headerLabel = normalizeFilterText(header.textContent).toLocaleLowerCase();
             if (skipFilterLabels.has(headerLabel)) return;
 
+            const headerText = normalizeFilterText(header.textContent) || ("Column " + (index + 1));
             const label = document.createElement("label");
             label.className = "table-filter-field";
 
             const labelText = document.createElement("span");
-            labelText.textContent = normalizeFilterText(header.textContent) || ("Column " + (index + 1));
+            labelText.textContent = headerText;
             label.appendChild(labelText);
 
-            const select = document.createElement("select");
-            select.className = "table-column-filter";
-            select.dataset.columnIndex = String(index);
-            select.setAttribute("aria-label", "Filter by " + labelText.textContent);
-            select.addEventListener("change", () => {
-                selections[index] = select.value;
-                // A changed filter can invalidate selected values in other dropdowns.
-                refreshOptions();
-                renderFilteredRows();
-            });
+            if (isMasterTable) {
+                const container = document.createElement("div");
+                container.className = "searchable-filter-dropdown";
 
-            selects[index] = select;
-            label.appendChild(select);
-            controls.appendChild(label);
+                const inputWrap = document.createElement("div");
+                inputWrap.className = "searchable-filter-input-wrap";
+
+                const input = document.createElement("input");
+                input.type = "text";
+                input.className = "table-column-search-input";
+                input.dataset.columnIndex = String(index);
+                input.autocomplete = "off";
+                input.placeholder = "All " + headerText;
+                input.value = selections[index] || "";
+                input.setAttribute("aria-label", "Search or select " + headerText);
+
+                const toggleBtn = document.createElement("button");
+                toggleBtn.type = "button";
+                toggleBtn.className = "searchable-filter-toggle";
+                toggleBtn.textContent = "▾";
+                toggleBtn.setAttribute("aria-label", "Toggle " + headerText + " dropdown");
+
+                const menu = document.createElement("div");
+                menu.className = "searchable-filter-menu hidden";
+
+                inputWrap.appendChild(input);
+                inputWrap.appendChild(toggleBtn);
+                container.appendChild(inputWrap);
+                container.appendChild(menu);
+                label.appendChild(container);
+                controls.appendChild(label);
+
+                searchableDropdowns[index] = { container, input, toggleBtn, menu, headerText };
+
+                const openMenu = (showAll = false) => {
+                    closeAllSearchableFilterMenus(container);
+                    renderSearchableMenu(index, showAll);
+                    container.classList.add("open");
+                    menu.classList.remove("hidden");
+                };
+
+                input.addEventListener("focus", () => {
+                    openMenu(selectionModes[index] === "exact");
+                });
+
+                input.addEventListener("click", () => {
+                    openMenu(selectionModes[index] === "exact");
+                });
+
+                input.addEventListener("input", () => {
+                    const val = input.value;
+                    selections[index] = val;
+                    selectionModes[index] = val.trim() ? "contains" : "exact";
+                    renderFilteredRows();
+                    openMenu(false);
+                });
+
+                input.addEventListener("keydown", event => {
+                    if (event.key === "Escape") {
+                        closeAllSearchableFilterMenus();
+                    } else if (event.key === "Enter") {
+                        event.preventDefault();
+                        const firstOption = menu.querySelector(".searchable-filter-option:not(:first-child)");
+                        if (firstOption && input.value.trim()) {
+                            firstOption.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+                        } else {
+                            closeAllSearchableFilterMenus();
+                        }
+                    }
+                });
+
+                toggleBtn.addEventListener("click", event => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    if (container.classList.contains("open")) {
+                        closeAllSearchableFilterMenus();
+                    } else {
+                        openMenu(true);
+                        input.focus();
+                    }
+                });
+            } else {
+                const select = document.createElement("select");
+                select.className = "table-column-filter";
+                select.dataset.columnIndex = String(index);
+                select.setAttribute("aria-label", "Filter by " + headerText);
+                select.addEventListener("change", () => {
+                    selections[index] = select.value;
+                    // A changed filter can invalidate selected values in other dropdowns.
+                    refreshOptions();
+                    renderFilteredRows();
+                });
+
+                selects[index] = select;
+                label.appendChild(select);
+                controls.appendChild(label);
+            }
         });
 
         const reset = document.createElement("button");
@@ -1542,8 +1803,15 @@ function applyTableFilters(root = document) {
         reset.className = "secondary-btn table-filter-reset";
         reset.textContent = "Clear Filters";
         reset.addEventListener("click", () => {
+            globalSearchTerm = "";
+            if (globalSearchInput) globalSearchInput.value = "";
             selections.fill("");
+            selectionModes.fill("exact");
             selects.forEach(select => { select.value = ""; });
+            searchableDropdowns.forEach(widget => {
+                if (widget && widget.input) widget.input.value = "";
+            });
+            closeAllSearchableFilterMenus();
             rows.forEach(row => { row.style.display = ""; });
             const emptyRow = tbody.querySelector("tr.filter-empty-row");
             if (emptyRow) emptyRow.remove();
@@ -1808,6 +2076,7 @@ function exportDashboardReport() {
         ["Service Calls", get("totalServiceCalls"), get("completedServiceCalls"), get("pendingServiceCalls")],
         ["Application Calls", get("totalApplicationCalls"), get("completedApplicationCalls"), get("pendingApplicationCalls")],
         ["Active Diagnostic Labs", get("totalHospitals"), "", ""],
+        ["Active Instruments", get("totalInstruments"), "", ""],
         ["Calls Logged Today", get("todayServices"), "", ""],
         ["Calls Logged This Month", get("monthlyServices"), "", ""]
     ];

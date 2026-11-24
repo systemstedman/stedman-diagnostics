@@ -60,56 +60,74 @@ $isAdmin = (strcasecmp(trim((string)$userRole), "Admin") === 0);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 20px;
-            padding: 18px 30px;
+            gap: 16px;
+            padding: 10px 24px;
             background: #123b63;
             color: #ffffff;
         }
 
         .logo {
-            font-size: 23px;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 19px;
             font-weight: bold;
             white-space: nowrap;
+        }
+
+        .logo h3 {
+            margin: 0;
+            font-size: 19px;
+            line-height: 1.2;
+        }
+
+        .logo h6 {
+            margin: 0;
+            font-size: 13px;
+            font-weight: 500;
+            opacity: 0.9;
         }
 
         .header-right {
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            gap: 18px;
+            gap: 14px;
             font-size: 13px;
         }
 
         .user-information {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 2px;
             text-align: right;
         }
 
         .user-name {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
         }
 
         .user-role {
             display: inline-block;
             align-self: flex-end;
-            padding: 4px 8px;
+            padding: 2px 8px;
             border-radius: 12px;
             background: #e5efff;
             color: #123b63;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
         }
 
         .logout-button {
             display: inline-block;
-            padding: 9px 15px;
+            padding: 6px 13px;
             border: 1px solid rgba(255, 255, 255, 0.5);
             border-radius: 6px;
             color: #ffffff;
             text-decoration: none;
+            font-size: 13px;
             font-weight: bold;
             white-space: nowrap;
             transition: 0.2s;
@@ -127,8 +145,8 @@ $isAdmin = (strcasecmp(trim((string)$userRole), "Admin") === 0);
         .main-navigation {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 12px 25px;
+            gap: 6px;
+            padding: 7px 20px;
             background: #ffffff;
             border-bottom: 1px solid #dddddd;
             overflow-x: auto;
@@ -137,13 +155,13 @@ $isAdmin = (strcasecmp(trim((string)$userRole), "Admin") === 0);
         .nav-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 12px 16px;
+            gap: 6px;
+            padding: 8px 13px;
             border: none;
             border-radius: 7px;
             background: transparent;
             color: #344054;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
             white-space: nowrap;
@@ -161,17 +179,17 @@ $isAdmin = (strcasecmp(trim((string)$userRole), "Admin") === 0);
         }
 
         .nav-icon {
-            font-size: 18px;
+            font-size: 15px;
         }
 
         .admin-label {
             display: inline-block;
             margin-left: 3px;
-            padding: 3px 6px;
+            padding: 2px 5px;
             border-radius: 4px;
             background: #e8f1fb;
             color: #123b63;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: bold;
         }
 
@@ -181,8 +199,8 @@ $isAdmin = (strcasecmp(trim((string)$userRole), "Admin") === 0);
 
         .container {
             max-width: 1400px;
-            margin: 25px auto;
-            padding: 0 20px;
+            margin: 10px auto;
+            padding: 0 18px 14px;
         }
 
         .section-header {
@@ -190,27 +208,46 @@ $isAdmin = (strcasecmp(trim((string)$userRole), "Admin") === 0);
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 22px;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
         }
 
         .section-header h2 {
             margin: 0;
             color: #123b63;
+            font-size: 20px;
+        }
+
+        .section-header .button-row {
+            margin-top: 0;
         }
 
         .welcome {
-            padding: 28px 0;
+            padding: 2px 0 8px;
+            margin-bottom: 10px;
         }
 
         .welcome h1 {
-            margin-bottom: 8px;
+            display: inline;
+            margin: 0;
             color: #123b63;
+            font-size: 21px;
+        }
+
+        .welcome h2 {
+            display: inline;
+            margin: 0 0 0 6px;
+            color: #086f91;
+            font-size: 16px;
+            font-weight: 600;
         }
 
         .welcome p {
+            margin: 4px 0 0;
             color: #667085;
-            line-height: 1.6;
+            font-size: 13px;
+            line-height: 1.4;
         }
 
         /* ========================================
@@ -291,17 +328,17 @@ $isAdmin = (strcasecmp(trim((string)$userRole), "Admin") === 0);
         .button-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 20px;
+            gap: 10px;
+            margin-top: 12px;
         }
 
         .primary-btn,
         .secondary-btn {
-            padding: 11px 18px;
+            padding: 8px 15px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             transition: 0.2s;
         }
@@ -642,6 +679,22 @@ $isAdmin = (strcasecmp(trim((string)$userRole), "Admin") === 0);
 
             <div class="dashboard-extra-card">
 
+                <div class="dashboard-extra-icon">🔬</div>
+
+                <div class="dashboard-extra-content">
+
+                    <span id="totalInstruments" class="dashboard-extra-number">0</span>
+
+                    <span class="dashboard-extra-title">Active Instruments</span>
+
+                    <small>Total active instruments</small>
+
+                </div>
+
+            </div>
+
+            <div class="dashboard-extra-card">
+
                 <div class="dashboard-extra-icon">📅</div>
 
                 <div class="dashboard-extra-content">
@@ -773,7 +826,7 @@ $isAdmin = (strcasecmp(trim((string)$userRole), "Admin") === 0);
     <label for="email">Lab Email</label>
 
     <input
-        type="email"
+        type="text"
         id="email"
         readonly
     >
@@ -793,6 +846,7 @@ $isAdmin = (strcasecmp(trim((string)$userRole), "Admin") === 0);
                         type="text"
                         id="contact_person"
                         name="contact_person"
+                        readonly
                         required
                     >
 
@@ -803,10 +857,11 @@ $isAdmin = (strcasecmp(trim((string)$userRole), "Admin") === 0);
                     <label for="mobile">Contact Mobile Number *</label>
 
                     <input
-                        type="tel"
+                        type="text"
                         id="mobile"
                         name="mobile"
                         maxlength="20"
+                        readonly
                         required
                     >
 
@@ -1050,9 +1105,9 @@ $isAdmin = (strcasecmp(trim((string)$userRole), "Admin") === 0);
                 id="service_call_id"
             >
 
-            <div class="form-grid">
+            <div class="form-grid service-details-grid">
 
-                <div class="form-group">
+                <div class="form-group sd-col-3">
 
                     <label for="stage2_instrument_name">Instrument Name</label>
 
@@ -1064,10 +1119,9 @@ $isAdmin = (strcasecmp(trim((string)$userRole), "Admin") === 0);
 
                 </div>
 
-                <div class="form-group">
+                <div class="form-group sd-col-3">
 
                     <label for="stage2_serial_no">Serial Number</label>
-                    
 
                     <input
                         type="text"
@@ -1078,40 +1132,40 @@ $isAdmin = (strcasecmp(trim((string)$userRole), "Admin") === 0);
                 </div>
                 <!-- VISIT IN TIME - MANDATORY -->
 
-<div class="form-group">
+                <div class="form-group sd-col-3">
 
-    <label for="visit_in_time">Visit In Time *</label>
+                    <label for="visit_in_time">Visit In Time *</label>
 
-    <input
-        type="datetime-local"
-        id="visit_in_time"
-        name="visit_in_time"
-        required
-    >
+                    <input
+                        type="datetime-local"
+                        id="visit_in_time"
+                        name="visit_in_time"
+                        required
+                    >
 
-    <small>Enter the date and time when you arrived at the laboratory.</small>
+                    <small>Arrival date and time at lab.</small>
 
-</div>
+                </div>
 
 
-<!-- VISIT OUT TIME - MANDATORY -->
+                <!-- VISIT OUT TIME - MANDATORY -->
 
-<div class="form-group">
+                <div class="form-group sd-col-3">
 
-    <label for="visit_out_time">Visit Out Time *</label>
+                    <label for="visit_out_time">Visit Out Time *</label>
 
-    <input
-        type="datetime-local"
-        id="visit_out_time"
-        name="visit_out_time"
-        required
-    >
+                    <input
+                        type="datetime-local"
+                        id="visit_out_time"
+                        name="visit_out_time"
+                        required
+                    >
 
-    <small>Enter the date and time when you left the laboratory.</small>
+                    <small>Departure date and time from lab.</small>
 
-</div>
+                </div>
 
-                <div class="form-group full-width">
+                <div class="form-group sd-col-4">
 
                     <label for="stage2_problem_reported">Problem Reported *</label>
 
@@ -1123,7 +1177,7 @@ $isAdmin = (strcasecmp(trim((string)$userRole), "Admin") === 0);
 
                 </div>
 
-                <div class="form-group full-width">
+                <div class="form-group sd-col-4">
 
                     <label for="observations">Observations *</label>
 
@@ -1135,7 +1189,7 @@ $isAdmin = (strcasecmp(trim((string)$userRole), "Admin") === 0);
 
                 </div>
 
-                <div class="form-group full-width">
+                <div class="form-group sd-col-4">
 
                     <label for="actions_taken">Actions Taken *</label>
 
@@ -1147,7 +1201,7 @@ $isAdmin = (strcasecmp(trim((string)$userRole), "Admin") === 0);
 
                 </div>
 
-                <div class="form-group full-width">
+                <div class="form-group sd-col-6">
 
                     <label>Whether Spares/Material is Required? *</label>
 
@@ -1173,40 +1227,7 @@ $isAdmin = (strcasecmp(trim((string)$userRole), "Admin") === 0);
 
                 </div>
 
-                <div id="sparesRequiredFields" class="form-group full-width hidden">
-
-                    <label>Whether Spare/Material is Replaced ?</label>
-
-                    <div class="radio-group">
-                        <label>
-                            <input
-                                type="radio"
-                                name="spares_to_be_replaced"
-                                value="No"
-                            >
-                            No
-                        </label>
-                        <label>
-                            <input
-                                type="radio"
-                                name="spares_to_be_replaced"
-                                value="Yes"
-                            >
-                            Yes
-                        </label>
-                    </div>
-
-                    <label for="spares_details">Spares Details *</label>
-
-                    <textarea
-                        id="spares_details"
-                        name="spares_details"
-                        placeholder="Enter the spares or material details"
-                    ></textarea>
-
-                </div>
-
-                <div class="form-group full-width">
+                <div class="form-group sd-col-6">
 
                     <label for="signed_report">Upload Signed Service Report</label>
 
@@ -1220,6 +1241,43 @@ $isAdmin = (strcasecmp(trim((string)$userRole), "Admin") === 0);
                     <small>
                         Accepted formats: PDF, JPG, PNG, DOC, DOCX.
                     </small>
+
+                </div>
+
+                <div id="sparesRequiredFields" class="form-group sd-col-12 spares-inline-grid hidden">
+
+                    <div class="spares-inline-col">
+                        <label>Whether Spare/Material is Replaced ?</label>
+
+                        <div class="radio-group">
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="spares_to_be_replaced"
+                                    value="No"
+                                >
+                                No
+                            </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="spares_to_be_replaced"
+                                    value="Yes"
+                                >
+                                Yes
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="spares-inline-col spares-details-col">
+                        <label for="spares_details">Spares Details *</label>
+
+                        <textarea
+                            id="spares_details"
+                            name="spares_details"
+                            placeholder="Enter the spares or material details"
+                        ></textarea>
+                    </div>
 
                 </div>
 

@@ -24,20 +24,41 @@ function instrumentResponse(
     exit;
 }
 
+$cachedInstrumentRequestData = null;
+
 function instrumentRequestData(): array
 {
+    global $cachedInstrumentRequestData;
+
+    if ($cachedInstrumentRequestData !== null) {
+        return $cachedInstrumentRequestData;
+    }
+
     $contentType = $_SERVER["CONTENT_TYPE"] ?? "";
 
     if (stripos($contentType, "application/json") !== false) {
         $data = json_decode(file_get_contents("php://input"), true);
 
-        return is_array($data) ? $data : [];
+        $cachedInstrumentRequestData = is_array($data) ? $data : [];
+    } else {
+        $cachedInstrumentRequestData = $_POST;
     }
 
-    return $_POST;
+    return $cachedInstrumentRequestData;
 }
 
 $method = $_SERVER["REQUEST_METHOD"];
+if ($method === "POST") {
+    $override = strtoupper(trim((string)($_SERVER["HTTP_X_HTTP_METHOD_OVERRIDE"] ?? "")));
+    if ($override === "") {
+        $bodyData = instrumentRequestData();
+        $override = strtoupper(trim((string)($bodyData["_method"] ?? "")));
+    }
+    if ($override === "PUT") {
+        $method = "PUT";
+    }
+}
+
 $isAdmin = (($_SESSION["role"] ?? "") === "Admin");
 
 /*

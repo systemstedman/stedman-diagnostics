@@ -114,41 +114,43 @@ $fields = [
     <link rel="stylesheet" href="assets/css/style.css">
     <style>
         body { background: #f4f7fb; color: #25364a; font-family: "Segoe UI", Arial, sans-serif; margin: 0; }
-        .detail-header { background: linear-gradient(135deg, #0b4f71, #086f91); color: #fff; padding: 20px 5%; }
-        .detail-header h1 { margin: 0; font-size: 25px; }
-        .detail-header p { margin: 6px 0 0; opacity: .9; }
-        .detail-container { max-width: 1100px; margin: 28px auto; padding: 0 20px 40px; }
-        .detail-card { background: #fff; border: 1px solid #e1e8ef; border-radius: 14px; box-shadow: 0 5px 18px rgba(0,0,0,.05); overflow: hidden; }
-        .detail-toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding: 20px 24px; border-bottom: 1px solid #e7edf2; }
-        .detail-toolbar h2 { color: #0b4f71; margin: 0; font-size: 20px; }
-        .detail-table-wrap { overflow-x: auto; }
-        .detail-table { width: 100%; border-collapse: collapse; }
-        .detail-table th, .detail-table td { padding: 14px 18px; border-bottom: 1px solid #edf1f5; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
-        .detail-table th { width: 30%; color: #475467; background: #f8fafc; font-weight: 600; }
-        .detail-table tr:last-child th, .detail-table tr:last-child td { border-bottom: 0; }
-        .detail-table td { line-height: 1.55; }
+        .detail-header { background: linear-gradient(135deg, #0b4f71, #086f91); color: #fff; padding: 10px 4%; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+        .detail-header h1 { margin: 0; font-size: 19px; line-height: 1.2; }
+        .detail-header span { font-size: 13px; opacity: 0.9; }
+        .detail-container { max-width: 1320px; margin: 12px auto; padding: 0 18px 16px; }
+        .detail-card { background: #fff; border: 1px solid #e1e8ef; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.05); overflow: hidden; }
+        .detail-toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 10px 18px; border-bottom: 1px solid #e7edf2; }
+        .detail-toolbar h2 { color: #0b4f71; margin: 0; font-size: 18px; }
+        .detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .detail-item { display: grid; grid-template-columns: 190px minmax(0, 1fr); border-bottom: 1px solid #edf1f5; border-right: 1px solid #edf1f5; }
+        .detail-item:nth-child(2n) { border-right: 0; }
+        .detail-label { padding: 8px 12px; color: #475467; background: #f8fafc; font-weight: 600; font-size: 12.5px; }
+        .detail-value { padding: 8px 12px; font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
         .empty-value { color: #98a2b3; }
-        .report-link { color: #087b9e; font-weight: 600; }
-        .raw-url { color: #667085; font-size: 12px; margin-top: 5px; }
-        .detail-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-        .detail-button { display: inline-block; border: 0; border-radius: 7px; padding: 10px 15px; background: #0b4f71; color: white; font-weight: 600; text-decoration: none; cursor: pointer; }
+        .report-link { color: #087b9e; font-weight: 600; font-size: 13px; }
+        .raw-url { color: #667085; font-size: 11px; margin-top: 2px; }
+        .detail-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+        .detail-button { display: inline-block; border: 0; border-radius: 6px; padding: 7px 13px; background: #0b4f71; color: white; font-size: 13px; font-weight: 600; text-decoration: none; cursor: pointer; }
         .detail-button.secondary { background: #eef4f7; color: #0b4f71; border: 1px solid #d5e2e9; }
-        .error-card { padding: 28px; color: #b42318; }
+        .error-card { padding: 24px; color: #b42318; }
+        @media (max-width: 900px) {
+            .detail-grid { grid-template-columns: 1fr; }
+            .detail-item { border-right: 0; grid-template-columns: 170px minmax(0, 1fr); }
+        }
         @media (max-width: 600px) {
-            .detail-table th, .detail-table td { padding: 11px 12px; }
-            .detail-table th { width: 42%; }
-            .detail-header h1 { font-size: 21px; }
+            .detail-item { grid-template-columns: 135px minmax(0, 1fr); }
+            .detail-header h1 { font-size: 17px; }
         }
     </style>
 </head>
 <body>
     <header class="detail-header">
-        <h1>Stedman Pharmaceuticals Pvt Ltd </h1> (Diagnostics Divison)
-        
+        <h1>Stedman Pharmaceuticals Pvt Ltd</h1>
+        <span>(Diagnostics Division)</span>
     </header>
 
     <main class="detail-container">
-        <div class="detail-actions" style="margin-bottom:16px">
+        <div class="detail-actions" style="margin-bottom:10px">
             <a class="detail-button secondary" href="index.php?section=completed">← Back to Completed Calls</a>
             <a class="detail-button secondary" href="index.php">Dashboard</a>
         </div>
@@ -163,7 +165,7 @@ $fields = [
                 <div class="detail-toolbar">
                     <div>
                         <h2>Service Call: <?= h($service["call_id"] ?? ("Record #" . $service["id"])) ?></h2>
-                        <p style="margin:6px 0 0;color:#667085">All details below are read-only.</p>
+                        <p style="margin:2px 0 0;color:#667085;font-size:12px">All details below are read-only.</p>
                     </div>
                     <div class="detail-actions">
                         <?php if (!empty($service["signed_report_url"])): ?>
@@ -172,30 +174,26 @@ $fields = [
                     </div>
                 </div>
 
-                <div class="detail-table-wrap">
-                    <table class="detail-table">
-                        <tbody>
-                        <?php foreach ($fields as $key => $label): ?>
-                            <tr>
-                                <th scope="row"><?= h($label) ?></th>
-                                <td>
-                                    <?php
-                                    if ($key === "lab_id" && !empty($service["diagnostic_lab_name"])) {
-                                        echo h($service["lab_id"]) . " — " . h($service["diagnostic_lab_name"]);
-                                    } elseif ($key === "instrument_id" && !empty($service["instrument_name"])) {
-                                        echo h($service["instrument_id"]) . " — " . h($service["instrument_name"]);
-                                        if (!empty($service["serial_number"])) {
-                                            echo " (Serial: " . h($service["serial_number"]) . ")";
-                                        }
-                                    } else {
-                                        echo displayValue($service, $key);
+                <div class="detail-grid">
+                    <?php foreach ($fields as $key => $label): ?>
+                        <div class="detail-item">
+                            <div class="detail-label"><?= h($label) ?></div>
+                            <div class="detail-value">
+                                <?php
+                                if ($key === "lab_id" && !empty($service["diagnostic_lab_name"])) {
+                                    echo h($service["lab_id"]) . " — " . h($service["diagnostic_lab_name"]);
+                                } elseif ($key === "instrument_id" && !empty($service["instrument_name"])) {
+                                    echo h($service["instrument_id"]) . " — " . h($service["instrument_name"]);
+                                    if (!empty($service["serial_number"])) {
+                                        echo " (Serial: " . h($service["serial_number"]) . ")";
                                     }
-                                    ?>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                                } else {
+                                    echo displayValue($service, $key);
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             <?php endif; ?>
         </section>

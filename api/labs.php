@@ -21,6 +21,38 @@ function labResponse($success, $message, $data = null, $statusCode = 200)
 }
 
 $method = $_SERVER["REQUEST_METHOD"];
+$cachedLabRequestData = null;
+
+function getLabRequestData(): array
+{
+    global $cachedLabRequestData;
+
+    if ($cachedLabRequestData !== null) {
+        return $cachedLabRequestData;
+    }
+
+    $contentType = $_SERVER["CONTENT_TYPE"] ?? "";
+
+    if (stripos($contentType, "application/json") !== false) {
+        $data = json_decode(file_get_contents("php://input"), true);
+        $cachedLabRequestData = is_array($data) ? $data : [];
+    } else {
+        $cachedLabRequestData = $_POST;
+    }
+
+    return $cachedLabRequestData;
+}
+
+if ($method === "POST") {
+    $override = strtoupper(trim((string)($_SERVER["HTTP_X_HTTP_METHOD_OVERRIDE"] ?? "")));
+    if ($override === "") {
+        $bodyData = getLabRequestData();
+        $override = strtoupper(trim((string)($bodyData["_method"] ?? "")));
+    }
+    if ($override === "PUT") {
+        $method = "PUT";
+    }
+}
 
 $isAdmin = (($_SESSION["role"] ?? "") === "Admin");
 
@@ -64,25 +96,6 @@ if ($method === "GET") {
         "Laboratories retrieved successfully.",
         $result->fetch_all(MYSQLI_ASSOC)
     );
-}
-
-/*
-|--------------------------------------------------------------------------
-| Read JSON or form data
-|--------------------------------------------------------------------------
-*/
-
-function getLabRequestData(): array
-{
-    $contentType = $_SERVER["CONTENT_TYPE"] ?? "";
-
-    if (stripos($contentType, "application/json") !== false) {
-        $data = json_decode(file_get_contents("php://input"), true);
-
-        return is_array($data) ? $data : [];
-    }
-
-    return $_POST;
 }
 
 /*
